@@ -34,6 +34,8 @@ const initDB = async () => {
   }
 };
 initDB();
+
+// root route
 app.get("/", (req: Request, res: Response) => {
   //   res.send("Hello World!");
   res.status(200).json({
@@ -43,16 +45,14 @@ app.get("/", (req: Request, res: Response) => {
   });
 });
 
+// post user
 app.post("/api/v1/users", async (req: Request, res: Response) => {
   try {
     const { name, email, password, age } = req.body;
-    const result = await pool.query(
-      `
-    INSERT INTO users (name, email, password, age) VALUES 
-    ($1,$2,$3,$4) RETURNING *
-    `,
-      [name, email, password, age],
-    );
+
+    const queryText = `  INSERT INTO users (name, email, password, age) VALUES ($1,$2,$3,$4) RETURNING *`;
+    const values = [name, email, password, age];
+    const result = await pool.query(queryText, values);
 
     console.log(result);
     res.status(201).json({
@@ -68,6 +68,77 @@ app.post("/api/v1/users", async (req: Request, res: Response) => {
   }
 });
 
+// get users
+app.get("/api/v1/users", async (req: Request, res: Response) => {
+  try {
+    const queryText = `SELECT * FROM users`;
+    const result = await pool.query(queryText);
+
+    console.log(result.rows);
+    res.status(200).json({
+      success: true,
+      message: "users data retrieved!",
+      data: result.rows,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error?.message,
+    });
+  }
+});
+
+// get single user
+app.get("/api/v1/users/:id", async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const queryText = "SELECT * FROM users WHERE id = $1";
+    const values = [id];
+    const result = await pool.query(queryText, values);
+    res.status(200).json({
+      success: true,
+      message: "users data retrieved!",
+      data: result.rows,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error?.message,
+    });
+  }
+});
+
+// get single user
+app.put("/api/v1/users/:id", async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { name, email, password, is_active, age } = req.body;
+    const queryText = `
+      UPDATE users 
+      SET name =COALESCE($1, name),
+      email =COALESCE($2, email),
+      password = COALESCE($3, password),
+      is_active = COALESCE($4, is_active),
+      age = COALESCE($5, age)
+      WHERE id = $6 
+      RETURNING *
+    `;
+    const values = [name, email, password, is_active, age, id];
+    const result = await pool.query(queryText, values);
+    res.status(201).json({
+      success: true,
+      message: "users data updated!",
+      data: result.rows,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error?.message,
+    });
+  }
+});
+
+// listening port
 app.listen(PORT, () => {
   console.log(`This server is running on http://localhost:${PORT}/`);
 });
