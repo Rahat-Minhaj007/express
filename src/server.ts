@@ -138,6 +138,26 @@ app.put("/api/v1/users/:id", async (req: Request, res: Response) => {
   }
 });
 
+// get single user
+app.delete("/api/v1/users/:id", async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const queryText = "DELETE FROM users WHERE id = $1";
+    const values = [id];
+    const result = await pool.query(queryText, values);
+    res.status(201).json({
+      success: true,
+      message: "users data deleted!",
+      data: result.rows,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error?.message,
+    });
+  }
+});
+
 // listening port
 app.listen(PORT, () => {
   console.log(`This server is running on http://localhost:${PORT}/`);
