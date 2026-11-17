@@ -117,17 +117,33 @@ app.put("/api/v1/users/:id", async (req: Request, res: Response) => {
       UPDATE users 
       SET name =COALESCE($1, name),
       password = COALESCE($2, password),
+      age = COALESCE($4, age),
       is_active = COALESCE($3, is_active),
-      age = COALESCE($4, age)
+      updated_at = NOW()
       WHERE id = $5 
       RETURNING *
     `;
-    const values = [name, password, is_active, age, id];
+    const values = [
+      name ?? null,
+      password ?? null,
+      is_active ?? null,
+      age ?? null,
+      id,
+    ];
     const result = await pool.query(queryText, values);
-    res.status(201).json({
+
+    // Handle case where user ID does not exist
+    if (result.rowCount === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found!",
+      });
+    }
+
+    res.status(200).json({
       success: true,
       message: "users data updated!",
-      data: result.rows,
+      data: result.rows[0],
     });
   } catch (error: any) {
     res.status(500).json({
