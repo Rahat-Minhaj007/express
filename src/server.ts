@@ -4,15 +4,14 @@ import express, {
   type Response,
 } from "express";
 import { Pool } from "pg";
+import config from "./config";
 const app: Application = express();
 app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
-const PORT = 5001;
 
 const pool = new Pool({
-  connectionString:
-    "postgresql://neondb_owner:npg_hKqUu3fciw1X@ep-odd-wave-ao45vs1p-pooler.c-2.ap-southeast-1.aws.neon.tech/neondb?sslmode=false&channel_binding=require",
+  connectionString: config.connection_string,
 });
 
 const initDB = async () => {
@@ -29,6 +28,7 @@ const initDB = async () => {
             updated_at TIMESTAMP DEFAULT NOW()
             );
             `);
+            
   } catch (error) {
     console.log(error);
   }
@@ -153,14 +153,21 @@ app.put("/api/v1/users/:id", async (req: Request, res: Response) => {
   }
 });
 
-// get single user
+// delete single user
 app.delete("/api/v1/users/:id", async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const queryText = "DELETE FROM users WHERE id = $1";
     const values = [id];
     const result = await pool.query(queryText, values);
-    res.status(201).json({
+    // Handle case where user ID does not exist
+    if (result.rowCount === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found!",
+      });
+    }
+    res.status(200).json({
       success: true,
       message: "users data deleted!",
       data: result.rows,
@@ -174,6 +181,6 @@ app.delete("/api/v1/users/:id", async (req: Request, res: Response) => {
 });
 
 // listening port
-app.listen(PORT, () => {
-  console.log(`This server is running on http://localhost:${PORT}/`);
+app.listen(config.port, () => {
+  console.log(`This server is running on http://localhost:${config.port}/`);
 });
