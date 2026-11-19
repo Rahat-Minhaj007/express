@@ -10,6 +10,8 @@ app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
 
+// user module
+app.use("/api/v1/users", userRoute);
 // root route
 app.get("/", (req: Request, res: Response) => {
   //   res.send("Hello World!");
@@ -19,6 +21,5 @@ app.get("/", (req: Request, res: Response) => {
     author: "Rahat",
   });
 });
-app.use("/api/v1/users", userRoute);
 
 export default app;
