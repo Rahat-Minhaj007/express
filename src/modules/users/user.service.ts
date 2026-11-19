@@ -4,7 +4,7 @@ import type { IUser, UpdateUser } from "./user.interface";
 const createUserService = async (payload: IUser) => {
   const { name, email, password, age } = payload;
 
-  const queryText = `  INSERT INTO users (name, email, password, age) VALUES ($1,$2,$3,$4) RETURNING *`;
+  const queryText = `INSERT INTO users (name, email, password, age) VALUES ($1,$2,$3,$4) RETURNING *`;
   const values = [name, email, password, age];
   const result = await pool.query(queryText, values);
 
