@@ -7,6 +7,7 @@ dotenv.config({
 const config = {
   port: process.env.PORT,
   connection_string: process.env.DATABASE_URL ,
+  jwtSecreteKey:process.env.jwtSecreteKey as string
 };
 
 if (!config.connection_string) {
