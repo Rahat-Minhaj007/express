@@ -11,15 +11,12 @@ const createUserService = async (payload: IUser) => {
   const values = [name, email, hashPassword, age];
   const result = await pool.query(queryText, values);
   delete result.rows[0].password;
-  console.log(result);
   return result;
 };
 
 const getAllUserService = async () => {
   const queryText = `SELECT * FROM users`;
   const result = await pool.query(queryText);
-
-  console.log(result.rows);
   return result.rows;
 };
 

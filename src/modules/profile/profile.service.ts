@@ -14,8 +14,6 @@ const createProfileService = async (payload: any) => {
   const queryText = `INSERT INTO profiles (user_id, bio, address, phone, gender) VALUES ($1,$2,$3,$4,$5) RETURNING *`;
   const values = [user_id, bio, address, phone, gender];
   const result = await pool.query(queryText, values);
-
-  console.log(result);
   return result;
 };
 
