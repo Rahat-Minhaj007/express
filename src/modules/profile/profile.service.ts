@@ -3,7 +3,7 @@ import { pool } from "../../db";
 const createProfileService = async (payload: any) => {
   const { user_id, bio, address, phone, gender } = payload;
 
-  const userExistQueryText = "SELECT * FROM profiles WHERE id = $1";
+  const userExistQueryText = "SELECT * FROM users WHERE id = $1";
   const userExistValues = [user_id];
   const userExistResult = await pool.query(userExistQueryText, userExistValues);
 

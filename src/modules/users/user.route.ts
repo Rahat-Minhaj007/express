@@ -1,13 +1,14 @@
 import { Router, type Request, type Response } from "express";
 import { pool } from "../../db";
 import { userController } from "./user.controller";
+import auth from "../../middleware/auth";
 
 const router = Router();
 
 // post user
 // /api/v1/users
 router.post("/", userController.createUser);
-router.get("/", userController.getAllUser);
+router.get("/", auth, userController.getAllUser);
 router.get("/:id", userController.getSingleUser);
 router.put("/:id", userController.updateUser);
 router.delete("/:id", userController.deleteUser);
