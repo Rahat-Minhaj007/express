@@ -12,7 +12,7 @@ const loginService = async (payload: { email: string; password: string }) => {
   const checkUserQuery = "SELECT * FROM users WHERE email = $1";
   const checkUserValues = [email];
   const checkUser = await pool.query(checkUserQuery, checkUserValues);
-  console.log(checkUser.rows[0]);
+  // console.log(checkUser.rows[0]);
 
   if (checkUser.rowCount === 0) {
     throw new Error("Invalid Credential!");
@@ -33,6 +33,7 @@ const loginService = async (payload: { email: string; password: string }) => {
     id: checkUser.rows[0].id,
     name: checkUser.rows[0].name,
     email: checkUser.rows[0].email,
+    role: checkUser.rows[0].role
   };
 
   const accessToken = jwt.sign(jwtPayload, config.jwtSecreteKey, {
