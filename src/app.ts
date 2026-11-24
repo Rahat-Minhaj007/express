@@ -1,16 +1,22 @@
 import express, {
   type Application,
-  type NextFunction,
   type Request,
   type Response,
 } from "express";
-import { pool } from "./db";
 import { userRoute } from "./modules/users/user.route";
 import { profileRoute } from "./modules/profile/profile.route";
 import { authRoute } from "./modules/auth/auth.route";
 import loggerMiddleware from "./middleware/logger";
+import globalErrorHandler from "./middleware/globalErrorHandler";
+import cors from "cors";
 
 const app: Application = express();
+
+const corsOptions = {
+  origin: ["http://localhost:3000"],
+  optionsSuccessStatus: 200,
+};
+app.use(cors());
 // Without this, req.ip will be the proxy's IP, not the user's.
 app.set("trust proxy", true);
 app.use(express.json());
@@ -31,5 +37,8 @@ app.get("/", (req: Request, res: Response) => {
     author: "Rahat",
   });
 });
+
+// Global Error Handling Middleware
+app.use(globalErrorHandler);
 
 export default app;
