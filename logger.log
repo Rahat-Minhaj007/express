@@ -116,3 +116,23 @@ METHOD: GET | URL: /api/v1/users | IP: 127.0.0.1 | LOCATION: Unknown (local/priv
 METHOD: GET | URL: /api/v1/users | IP: 127.0.0.1 | LOCATION: Unknown (local/private IP) | UA: insomnia/13.4.0 | TIME: 2026-11-24T06:15:02.711Z
 
 METHOD: GET | URL: /api/v1/users | IP: 127.0.0.1 | LOCATION: Unknown (local/private IP) | UA: insomnia/13.4.0 | TIME: 2026-11-24T06:15:06.589Z
+
+METHOD: POST | URL: /api/v1/auth/login | IP: 127.0.0.1 | LOCATION: Unknown (local/private IP) | UA: insomnia/13.4.0 | TIME: 2026-11-25T02:07:36.232Z
+
+METHOD: POST | URL: /api/v1/auth/login | IP: 127.0.0.1 | LOCATION: Unknown (local/private IP) | UA: insomnia/13.4.0 | TIME: 2026-11-25T02:08:26.011Z
+
+METHOD: POST | URL: /api/v1/auth/login | IP: 127.0.0.1 | LOCATION: Unknown (local/private IP) | UA: insomnia/13.4.0 | TIME: 2026-11-25T02:08:29.935Z
+
+METHOD: POST | URL: /api/v1/auth/login | IP: 127.0.0.1 | LOCATION: Unknown (local/private IP) | UA: insomnia/13.4.0 | TIME: 2026-11-25T02:08:50.911Z
+
+METHOD: POST | URL: /api/v1/auth/login | IP: 127.0.0.1 | LOCATION: Unknown (local/private IP) | UA: insomnia/13.4.0 | TIME: 2026-11-25T02:44:06.226Z
+
+METHOD: POST | URL: /api/v1/auth/refresh-token | IP: 127.0.0.1 | LOCATION: Unknown (local/private IP) | UA: insomnia/13.4.0 | TIME: 2026-11-25T03:17:33.400Z
+
+METHOD: POST | URL: /api/v1/auth/refresh-token | IP: 127.0.0.1 | LOCATION: Unknown (local/private IP) | UA: insomnia/13.4.0 | TIME: 2026-11-25T03:18:34.804Z
+
+METHOD: POST | URL: /api/v1/auth/refresh-token | IP: 127.0.0.1 | LOCATION: Unknown (local/private IP) | UA: insomnia/13.4.0 | TIME: 2026-11-25T03:45:27.226Z
+
+METHOD: POST | URL: /api/v1/auth/refresh-token | IP: 127.0.0.1 | LOCATION: Unknown (local/private IP) | UA: insomnia/13.4.0 | TIME: 2026-11-25T03:45:48.309Z
+
+METHOD: POST | URL: /api/v1/auth/refresh-token | IP: 127.0.0.1 | LOCATION: Unknown (local/private IP) | UA: insomnia/13.4.0 | TIME: 2026-11-25T03:46:29.361Z

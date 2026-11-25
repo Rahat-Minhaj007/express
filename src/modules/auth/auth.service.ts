@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import { pool } from "../../db";
-import jwt from "jsonwebtoken";
+import jwt, { type JwtPayload } from "jsonwebtoken";
 import config from "../../config";
 
 const loginService = async (payload: { email: string; password: string }) => {
@@ -33,17 +33,54 @@ const loginService = async (payload: { email: string; password: string }) => {
     id: checkUser.rows[0].id,
     name: checkUser.rows[0].name,
     email: checkUser.rows[0].email,
-    role: checkUser.rows[0].role
+    role: checkUser.rows[0].role,
   };
 
   const accessToken = jwt.sign(jwtPayload, config.jwtSecreteKey, {
-    expiresIn: "1d",
+    expiresIn: "1h",
+  });
+
+  const refreshToken = jwt.sign(jwtPayload, config.refreshSecreteKey, {
+    expiresIn: "10d",
   });
 
   delete checkUser.rows[0].password;
-  return { accessToken, userInfo: checkUser.rows[0] };
+  return { accessToken, refreshToken, userInfo: checkUser.rows[0] };
+};
+
+const generateAccessToken = async (token: string) => {
+  if (!token) {
+    throw new Error("Unauthorized Access!!");
+  }
+  const decode = jwt.verify(token, config.refreshSecreteKey) as JwtPayload;
+
+  const userExistQueryText = "SELECT * FROM users WHERE email = $1";
+  const userExistValues = [decode.email];
+  const userExistResult = await pool.query(userExistQueryText, userExistValues);
+
+  if (userExistResult.rowCount === 0) {
+    throw new Error("User not found!");
+  }
+
+  if (!userExistResult.rows[0].is_active) {
+    throw new Error("Forbidden!");
+  }
+
+  const jwtPayload = {
+    id: userExistResult.rows[0].id,
+    name: userExistResult.rows[0].name,
+    email: userExistResult.rows[0].email,
+    role: userExistResult.rows[0].role,
+  };
+
+  const accessToken = jwt.sign(jwtPayload, config.jwtSecreteKey, {
+    expiresIn: "1h",
+  });
+
+  return { accessToken };
 };
 
 export const authService = {
   loginService,
+  generateAccessToken,
 };

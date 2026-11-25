@@ -9,6 +9,7 @@ import { authRoute } from "./modules/auth/auth.route";
 import loggerMiddleware from "./middleware/logger";
 import globalErrorHandler from "./middleware/globalErrorHandler";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 const app: Application = express();
 
@@ -17,6 +18,7 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 app.use(cors());
+app.use(cookieParser());
 // Without this, req.ip will be the proxy's IP, not the user's.
 app.set("trust proxy", true);
 app.use(express.json());
